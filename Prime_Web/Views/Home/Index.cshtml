@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/styles-login.css" rel="stylesheet">
+    <script src="~/scripts/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Styles/sweetalert.css">
+    <title>Inicio</title>
+</head>
+<body onload="nobackbutton();">
+    @model Prime_Web.Models.Usuario
+    <div class="container">
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <script type="text/javascript">
+                swal({title: "Error", 
+                    text: "@ViewBag.Error",
+                    type: "error"});
+            </script>
+           @*<div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                @ViewBag.Error
+            </div>*@
+        }
+        <div class="card card-container">
+            <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+            <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+            <p id="profile-name" class="profile-name-card"></p>
+            <form class="form-signin" action="../Home/validarInicio" method="POST">
+                @*<span id="reauth-email" class="reauth-email"></span>*@
+                <input type="text" id="inputUser" name="idUsuario" class="form-control" placeholder="Usuario" required autofocus value="@(Model!=null ? Model.idUsuario : string.Empty)">
+                <input type="password" id="inputPassword" name="clave" class="form-control" placeholder="Contraseña" required>
+                @*<div id="remember" class="checkbox">
+                    <label>
+                        <input type="checkbox" name="recordarme" value="1"> Recordarme
+                    </label>
+                </div>*@
+                <button class="btn btn-lg btn-success btn-block btn-signin" type="submit">Iniciar Sesión</button>
+            </form><!-- /form -->
+            @*<a href="#" class="forgot-password">
+                Forgot the password?
+            </a>*@
+        </div><!-- /card-container -->
+    </div><!-- /container -->
+    <script src="~/scripts/jquery-1.9.1.js"></script>
+    <script src="~/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function nobackbutton() {
+            window.location.hash = "no-back-button";
+            window.location.hash = "Again-No-back-button" //chrome
+            window.onhashchange = function () { window.location.hash = "no-back-button"; }
+        }
+    </script>
+</body>
+</html>

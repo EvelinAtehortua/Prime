@@ -1,0 +1,462 @@
+﻿@{string rutaMenu = "";}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Web</title>
+
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css"/>
+    <!-- Fonts  -->
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css"/>
+    <link rel="stylesheet" href="~/Content/simple-line-icons.css"/>
+    <!-- CSS Animate -->
+    <link rel="stylesheet" href="~/Content/animate.css"/>
+    <!-- Custom styles for this theme -->
+    <link rel="stylesheet" href="~/Content/styles-menu.css"/>
+    <!-- Feature detection -->
+    <script src="~/scripts/modernizr-2.6.2.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2-bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+    <link href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/styles-reportes.css" />
+    <script src="~/scripts/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Styles/sweetalert.css"/>
+    <script src="~/scripts/justgage.js"></script>
+    <script src="~/scripts/raphael-2.1.4.min.js"></script>
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+     <script src="/bundles/ie?v=2XveJ5PauxD4hKrKMGJAy98WTe1yUixdEmsfBq9sjeQ1"></script>
+
+     <![endif]-->
+
+</head>
+<body>
+    @{
+        List<Prime_Web.Models.Dimension> dim = new List<Prime_Web.Models.Dimension>();
+        if (Session["dimensiones"] != null)
+        {
+            dim = (List<Prime_Web.Models.Dimension>)Session["dimensiones"];
+        }
+    }
+    <!-- Page Wrapper-->
+    <section id="main-wrapper" class="theme-default">
+        @*@if (!string.IsNullOrEmpty(ViewBag.Advertencia))
+            {
+            <script type="text/javascript">
+                swal({title: "Warning",
+                    text: "@ViewBag.Advertencia",
+                    type: "warning"});
+            </script>
+        }*@
+        <!-- Top Header -->
+        <header id="header">
+            <ul class="nav navbar-nav navbar-left">
+                <li class="toggle-navigation toggle-left">
+                    <button class="sidebar-toggle" id="toggle-left">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </li>
+            </ul>
+            <div class="brand">
+                <img src="~/Images/LogoAlargadoTransparente.png" />
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown profile">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="meta">
+                            <span class="avatar">
+                                <img src="~/Images/profile.png" class="img-circle" alt="">
+                            </span>
+                            <span class="text">@Session["User"]</span>
+                            <span class="caret"></span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight" role="menu">
+                        <li>
+                            <a href="../Menu/CerrarSesion">
+                                <span class="icon">
+                                    <i class="fa fa-sign-out"></i>
+                                </span>Cerrar
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li></li>
+            </ul>
+        </header>
+        <aside class="sidebar sidebar-left">
+            <nav>
+                <h5 class="sidebar-header">Favoritos</h5>
+                <ul class="nav nav-pills nav-stacked">
+                    @*<li><a href="#" title="Favoritos"><i class='fa  fa-fw fa-star-o'></i>Favoritos</a>*@
+                    @*@Html.Raw(ViewBag.Menu)*@
+                    @*</li>*@
+                </ul>
+            </nav>
+            <nav>
+                <h5 class="sidebar-header">Menú</h5>
+                <ul class="nav nav-pills nav-stacked">
+                    @*<li><a href="#" title="Menú"><i class='fa  fa-fw fa-list-alt'></i>Menú</a>*@
+                    @Html.Raw(Session["Menu"])
+                    @*</li>*@
+                </ul>
+            </nav>
+        </aside>
+        <section class="main-content-wrapper">
+            @*<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="../Menu/Menu">Principal</a>
+                    </li>
+                </ul>
+            </div>*@
+            @if (!string.IsNullOrEmpty(ViewBag.Parametros))
+            {
+                <div id="config" class="config">
+                    <h4>PARAMETROS<a href="javascript:void(0)" class="config-link closed"><i class="fa fa-indent"></i></a></h4>
+                    <div class="config-swatch-wrap">
+                        <div class="row">
+                            <form id="formParam" action="../Reporte/cargar" method="POST">
+                                <ul class="list-group scrollable-menu">
+                                    @Html.Raw(ViewBag.Parametros)
+                                    <li class="list-group-item"><button type="button" class="btn btn-primary" id="cargar">Cargar</button></li>
+                                </ul>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+            <section id="main-content">
+                @RenderBody()
+            </section>
+        </section>
+        @*<div class="navbar navbar-default navbar-fixed-bottom">
+            <div style="text-align:center">
+                <footer>
+                    <img src="~/Images/LogoAlargadoTransparente.png" />
+                </footer>
+            </div>
+        </div>*@
+    </section>
+    
+    @*<div class="navbar navbar-default bottom">
+        <div style="text-align:center">
+            <footer>
+                <img src="~/Images/LogoAlargadoTransparente.png" />
+            </footer>
+        </div>
+    </div>*@
+    <script src="~/scripts/jquery-1.9.1.min.js"></script>
+    @*<script src="~/scripts/jquery-1.9.1.js"></script>*@
+    <script src="~/scripts/bootstrap.min.js"></script>
+    <script src="~/scripts/jquery.navgoco.min.js"></script>
+    <script src="~/scripts/app.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.min.js"></script>
+    <script src="~/scripts/raphael-2.1.4.min.js"></script>
+    <script src="~/scripts/justgage.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#cargar').click(function () {
+                alert("estoy submit")
+                var dimVal = [];
+
+                @foreach (var item in dim)
+                {
+                    if(item.tipoControl.Equals("checkbox"))
+                    {
+                        @: obtenerCheck('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                                        //@: alert(vc.join(", "));
+                    }
+                    if (item.tipoControl.Equals("select"))
+                    {
+                        @: obtenerSelect('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                                        //@: alert(vs.join(", "));
+                    }
+                    if (item.tipoControl.Equals("radiobutton"))
+                    {
+                        @: obtenerRadio('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                                        //@: alert(vr.join(", "));
+                    }
+                    if (item.tipoControl.Equals("textarea"))
+                    {
+                        @: obtenerTextarea('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                                        //@: alert(vta.join(", "));
+                    }
+                    if(item.tipoControl.Equals("date") || item.tipoControl.Equals("text"))
+                    {
+                        @: obtenerText('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                                        //@: alert(vo.join(", "));
+                    }
+                }
+                alert(dimVal.join(", "));
+            });
+
+            //$('#fechahora').click(function (e) {
+            //$('#fechahora').datetimepicker({
+            //    format: 'mm-dd-yyyy'
+            //});
+            //});
+
+            function obtenerCheck(nombre, dimension, dimVal) {
+                //alert(nombre)
+                //var valores = [];
+                //valores.push(dimension);
+                dimVal.push(dimension);
+                $.each($('input:checkbox[name=' + nombre + ']:checked'), function () {
+                    //alert($(this).val())
+                    //var valor = $(this).val();
+                    //alert(valor)
+                    //valores.push($(this).val());
+                    dimVal.push($(this).val());
+                });
+                //alert(valores.join(", "));
+                dimVal.push("|");
+                //return valores;
+            }
+
+            function obtenerSelect(nombre, dimension, dimVal) {
+                //alert(nombre)
+                //var valores = [];
+                //valores.push(dimension);
+                dimVal.push(dimension);
+                var valor = $('select[name=' + nombre + ']').val();
+                //valores.push(valor);
+                dimVal.push(valor);
+                //alert(valor)
+                //alert(valores.join(", "));
+                dimVal.push("|");
+                //return valores;
+            }
+
+            function obtenerRadio(nombre, dimension, dimVal) {
+                //alert(nombre)
+                //var valores = [];
+                //valores.push(dimension);
+                dimVal.push(dimension);
+                var valor = $('input[type="radio"][name=' + nombre + ']:checked').val();
+                //valores.push(valor);
+                dimVal.push(valor);
+                //alert(valor)
+                //alert(valores.join(", "));
+                dimVal.push("|");
+                //return valores;
+            }
+
+            function obtenerTextarea(nombre, dimension, dimVal) {
+                //alert(nombre)
+                //var valores = [];
+                //valores.push(dimension);
+                dimVal.push(dimension)
+                var valor = $('textarea[name=' + nombre + ']').val();
+                if (valor == "") {
+                    //valores.push(null);
+                    dimVal.push("null");
+                } else {
+                    //valores.push(valor);
+                    dimVal.push(valor);
+                }
+                //alert(valor)
+                //alert(valores.join(", "));
+                dimVal.push("|");
+                //return valores;
+            }
+
+            function obtenerText(nombre, dimension, dimVal) {
+                //alert(nombre)
+                //var valores = [];
+                //valores.push(dimension);
+                dimVal.push(dimension);
+                var valor = $('input:text[name=' + nombre + ']').val();
+                if (valor == "") {
+                    //valores.push(null);
+                    dimVal.push("null");
+                } else {
+                    //valores.push(valor);
+                    dimVal.push(valor);
+                }
+                //alert(valor)
+                //alert(valores.join(", "));
+                dimVal.push("|");
+                //return valores;
+            }
+
+            var cara1, cara2, cara3, cara4, cara5, cara6, cara7, rango;
+            @*rango = '@System.Web.HttpContext.Current.Session["rango"].ToString()';*@
+
+            window.onload = function () {
+                var cara1 = new JustGage({
+                    id: "cara1",
+                    value: getRandomInt(0, 100),
+                    min: 0,
+                    max: 100,
+                    symbol: "%",
+                    relativeGaugeSize: true,
+                    //label: $("#cara1").append('<div style="text-align:center"><img src="/Images/Iconos/1.dos_r7.png" /></div>')
+                });
+
+                var cara2 = new JustGage({
+                    id: "cara2",
+                    value: getRandomInt(0, 100),
+                    min: 0,
+                    max: 100,
+                    symbol: "%",
+                    relativeGaugeSize: true,
+                    //label: $("#cara2").append('<div style="text-align:center"><img src="/Images/Iconos/2.tres_r7.png" /></div>')
+                });
+
+                var cara3 = new JustGage({
+                    id: "cara3",
+                    value: getRandomInt(0, 100),
+                    min: 0,
+                    max: 100,
+                    symbol: "%",
+                    relativeGaugeSize: true,
+                    //label: $("#cara3").append('<div style="text-align:center"><img src="/Images/Iconos/3.cuatro_r7.png" /></div>')
+                });
+
+                var cara4 = new JustGage({
+                    id: "cara4",
+                    value: getRandomInt(0, 100),
+                    min: 0,
+                    max: 100,
+                    symbol: "%",
+                    relativeGaugeSize: true,
+                    //label: $("#cara4").append('<div style="text-align:center"><img src="/Images/Iconos/4.cinco_r7.png" /></div>')
+                });
+
+                var cara5 = new JustGage({
+                    id: "cara5",
+                    value: getRandomInt(0, 100),
+                    min: 0,
+                    max: 100,
+                    symbol: "%",
+                    relativeGaugeSize: true,
+                    //label: $("#cara5").append('<div style="text-align:center"><img src="/Images/Iconos/5.seis_r7.png" /></div>')
+                });
+
+                var cara6 = new JustGage({
+                    id: "cara6",
+                    value: getRandomInt(0, 100),
+                    min: 0,
+                    max: 100,
+                    symbol: "%",
+                    relativeGaugeSize: true,
+                    //label: $("#cara6").append('<div style="text-align:center"><img src="/Images/Iconos/6.ocho_r7.png" /></div>')
+                });
+
+                var cara7 = new JustGage({
+                    id: "cara7",
+                    value: getRandomInt(0, 100),
+                    min: 0,
+                    max: 100,
+                    symbol: "%",
+                    relativeGaugeSize: true,
+                    //label: $("#cara7").append('<div style="text-align:center"><img src="/Images/Iconos/7.diez_r7.png" /></div>')
+                });
+
+                setInterval(function () {
+                    cara1.refresh(getRandomInt(50, 100));
+                    cara2.refresh(getRandomInt(50, 100));
+                    cara3.refresh(getRandomInt(50, 100));
+                    cara4.refresh(getRandomInt(50, 100));
+                    cara5.refresh(getRandomInt(50, 100));
+                    cara6.refresh(getRandomInt(50, 100));
+                    cara7.refresh(getRandomInt(50, 100));
+                }, 2500);
+
+                //$("#cara1").append('<div style="text-align:center"><img src="/Images/Iconos/1.dos_r7.png" /></div>');
+                //$("#cara2").append('<div style="text-align:center"><img src="/Images/Iconos/2.tres_r7.png" /></div>');
+                //$("#cara3").append('<div style="text-align:center"><img src="/Images/Iconos/3.cuatro_r7.png" /></div>');
+                //$("#cara4").append('<div style="text-align:center"><img src="/Images/Iconos/4.cinco_r7.png" /></div>');
+                //$("#cara5").append('<div style="text-align:center"><img src="/Images/Iconos/5.seis_r7.png" /></div>');
+                //$("#cara6").append('<div style="text-align:center"><img src="/Images/Iconos/6.ocho_r7.png" /></div>');
+                //$("#cara7").append('<div style="text-align:center"><img src="/Images/Iconos/7.diez_r7.png" /></div>');
+            };
+
+            $(function () {
+                $('#container').highcharts({
+                    /*title: {
+                        text: 'Monthly Average Temperature',
+                        x: -20 //center
+                    },
+                    subtitle: {
+                        text: 'Source: WorldClimate.com',
+                        x: -20
+                    },*/
+                    xAxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Temperature (°C)'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        valueSuffix: '°C'
+                    },
+                    series: [{
+                        name: 'Tokyo',
+                        data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+                    }, {
+                        name: 'New York',
+                        data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+                    }, {
+                        name: 'Berlin',
+                        data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+                    }, {
+                        name: 'London',
+                        data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+                    }]
+                });
+            });
+
+            @if (Session["paramDates"] != null)
+            {
+                List<string> d = (List<string>)Session["paramDates"];
+
+                for (var index = 0; index < d.Count; index++)
+                {
+                    @: cargarCalendario("@d[index]")
+                }
+            }
+            @if (Session["paramSelects"] != null)
+            {
+                List<string> s = (List<string>)Session["paramSelects"];
+
+                for (var index = 0; index < s.Count; index++)
+                {
+                    @: cargarCombo("@s[index]")
+                }
+            }
+
+            function cargarCalendario(id) {
+                $('#' + id + '').datepicker({
+                    format: 'mm-dd-yyyy'
+                });
+            }
+
+            function cargarCombo(id) {
+                /* dropdown and filter select */
+                $('#' + id + '').select2();
+            }
+        });
+    </script>
+</body>
+</html>

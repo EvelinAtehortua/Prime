@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "~/Views/Master.cshtml";
+}
+@*<h2>Reporte General</h2>*@
+<div class="container">
+    
+    @{
+        int rango = (int)System.Web.HttpContext.Current.Session["rango"];
+        string[] permisos = (string[])System.Web.HttpContext.Current.Session["permisos"];
+    }
+
+    <div class="row">
+
+    @for (int i = 0; i < permisos.Length; i++)
+    {
+        int div = 96 / permisos.Length;
+        string cara = "cara" + permisos[i];
+        string imagen = "/Images/Iconos/" + permisos[i] + ".png";
+        <div class="col-md-3 col-sm-4 col-xs-6" style="width:@div%;">
+            <div id="@cara" style="height:154.517px; margin-top: -60px; "></div>
+            @*<div id="cara1" style="margin-top: -40px;"></div>*@
+            <div style="text-align:center"><img src="@imagen" /></div>
+        </div>
+    }
+    </div>
+</div>
