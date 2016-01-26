@@ -126,6 +126,7 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\styles-reportes.css" />
+    <Content Include="Content\sweetalert.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\LogoAlargadoTransparente.png" />
     <Content Include="scripts\ai.0.15.0-build58334.js" />
@@ -237,7 +238,6 @@
     <Content Include="scripts\moment.min.js" />
     <Content Include="scripts\sweetalert-dev.js" />
     <Content Include="scripts\sweetalert.min.js" />
-    <Content Include="Styles\sweetalert.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

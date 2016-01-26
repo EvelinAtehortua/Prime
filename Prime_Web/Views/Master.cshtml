@@ -38,21 +38,13 @@
 <body>
     @{
         List<Prime_Web.Models.Dimension> dim = new List<Prime_Web.Models.Dimension>();
-        if (Session["dimensiones"] != null)
+        if (System.Web.HttpContext.Current.Session["dimensiones"] != null)
         {
-            dim = (List<Prime_Web.Models.Dimension>)Session["dimensiones"];
+            dim = (List<Prime_Web.Models.Dimension>)System.Web.HttpContext.Current.Session["dimensiones"];
         }
     }
     <!-- Page Wrapper-->
     <section id="main-wrapper" class="theme-default">
-        @*@if (!string.IsNullOrEmpty(ViewBag.Advertencia))
-            {
-            <script type="text/javascript">
-                swal({title: "Warning",
-                    text: "@ViewBag.Advertencia",
-                    type: "warning"});
-            </script>
-        }*@
         <!-- Top Header -->
         <header id="header">
             <ul class="nav navbar-nav navbar-left">
@@ -72,7 +64,7 @@
                             <span class="avatar">
                                 <img src="~/Images/profile.png" class="img-circle" alt="">
                             </span>
-                            <span class="text">@Session["User"]</span>
+                            <span class="text">@System.Web.HttpContext.Current.Session["User"]</span>
                             <span class="caret"></span>
                         </span>
                     </a>
@@ -102,7 +94,7 @@
                 <h5 class="sidebar-header">Menú</h5>
                 <ul class="nav nav-pills nav-stacked">
                     @*<li><a href="#" title="Menú"><i class='fa  fa-fw fa-list-alt'></i>Menú</a>*@
-                    @Html.Raw(Session["Menu"])
+                    @Html.Raw(System.Web.HttpContext.Current.Session["Menu"])
                     @*</li>*@
                 </ul>
             </nav>
@@ -175,27 +167,27 @@
                 {
                     if(item.tipoControl.Equals("checkbox"))
                     {
-                        @: obtenerCheck('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                        @: obtenerCheck('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
                                         //@: alert(vc.join(", "));
                     }
                     if (item.tipoControl.Equals("select"))
                     {
-                        @: obtenerSelect('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                        @: obtenerSelect('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
                                         //@: alert(vs.join(", "));
                     }
                     if (item.tipoControl.Equals("radiobutton"))
                     {
-                        @: obtenerRadio('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                        @: obtenerRadio('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
                                         //@: alert(vr.join(", "));
                     }
                     if (item.tipoControl.Equals("textarea"))
                     {
-                        @: obtenerTextarea('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                        @: obtenerTextarea('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
                                         //@: alert(vta.join(", "));
                     }
                     if(item.tipoControl.Equals("date") || item.tipoControl.Equals("text"))
                     {
-                        @: obtenerText('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))', dimVal)
+                        @: obtenerText('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
                                         //@: alert(vo.join(", "));
                     }
                 }
@@ -208,7 +200,7 @@
             //});
             //});
 
-            function obtenerCheck(nombre, dimension, dimVal) {
+            function obtenerCheck(nombre, dimension) {
                 //alert(nombre)
                 //var valores = [];
                 //valores.push(dimension);
@@ -225,7 +217,7 @@
                 //return valores;
             }
 
-            function obtenerSelect(nombre, dimension, dimVal) {
+            function obtenerSelect(nombre, dimension) {
                 //alert(nombre)
                 //var valores = [];
                 //valores.push(dimension);
@@ -239,7 +231,7 @@
                 //return valores;
             }
 
-            function obtenerRadio(nombre, dimension, dimVal) {
+            function obtenerRadio(nombre, dimension) {
                 //alert(nombre)
                 //var valores = [];
                 //valores.push(dimension);
@@ -253,7 +245,7 @@
                 //return valores;
             }
 
-            function obtenerTextarea(nombre, dimension, dimVal) {
+            function obtenerTextarea(nombre, dimension) {
                 //alert(nombre)
                 //var valores = [];
                 //valores.push(dimension);
@@ -272,7 +264,7 @@
                 //return valores;
             }
 
-            function obtenerText(nombre, dimension, dimVal) {
+            function obtenerText(nombre, dimension) {
                 //alert(nombre)
                 //var valores = [];
                 //valores.push(dimension);
@@ -291,8 +283,7 @@
                 //return valores;
             }
 
-            var cara1, cara2, cara3, cara4, cara5, cara6, cara7, rango;
-            @*rango = '@System.Web.HttpContext.Current.Session["rango"].ToString()';*@
+            var cara1, cara2, cara3, cara4, cara5, cara6, cara7;
 
             window.onload = function () {
                 var cara1 = new JustGage({
@@ -374,14 +365,6 @@
                     cara6.refresh(getRandomInt(50, 100));
                     cara7.refresh(getRandomInt(50, 100));
                 }, 2500);
-
-                //$("#cara1").append('<div style="text-align:center"><img src="/Images/Iconos/1.dos_r7.png" /></div>');
-                //$("#cara2").append('<div style="text-align:center"><img src="/Images/Iconos/2.tres_r7.png" /></div>');
-                //$("#cara3").append('<div style="text-align:center"><img src="/Images/Iconos/3.cuatro_r7.png" /></div>');
-                //$("#cara4").append('<div style="text-align:center"><img src="/Images/Iconos/4.cinco_r7.png" /></div>');
-                //$("#cara5").append('<div style="text-align:center"><img src="/Images/Iconos/5.seis_r7.png" /></div>');
-                //$("#cara6").append('<div style="text-align:center"><img src="/Images/Iconos/6.ocho_r7.png" /></div>');
-                //$("#cara7").append('<div style="text-align:center"><img src="/Images/Iconos/7.diez_r7.png" /></div>');
             };
 
             $(function () {
@@ -427,7 +410,7 @@
                 });
             });
 
-            @if (Session["paramDates"] != null)
+            @if (System.Web.HttpContext.Current.Session["paramDates"] != null)
             {
                 List<string> d = (List<string>)Session["paramDates"];
 
@@ -436,7 +419,7 @@
                     @: cargarCalendario("@d[index]")
                 }
             }
-            @if (Session["paramSelects"] != null)
+            @if (System.Web.HttpContext.Current.Session["paramSelects"] != null)
             {
                 List<string> s = (List<string>)Session["paramSelects"];
 

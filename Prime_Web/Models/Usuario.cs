@@ -11,6 +11,5 @@ namespace Prime_Web.Models
         public string clave { set; get; }
         public string nomUsuario { set; get; }
         public string nomOrganizacion { set; get; }
-        public string nitOrganizacion { set; get; }
     }
 }

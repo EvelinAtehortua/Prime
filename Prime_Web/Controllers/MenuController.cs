@@ -12,43 +12,34 @@ namespace Prime_Web.Controllers
     {
         List<string> dates = new List<string>();
         List<string> selects = new List<string>();
+        Usuario usuario = System.Web.HttpContext.Current.Session["usuario"] as Usuario;
         // GET: Menu
         public ActionResult Menu()
         {
-            Usuario usuario = Session["usuario"] as Usuario;
-            string menu = GenerateMenuSistemas(usuario.idUsuario);
+            string menu = GenerateMenuSistemas();
             System.Web.HttpContext.Current.Session["Menu"] = menu;
             System.Web.HttpContext.Current.Session["User"] = usuario.nomUsuario;
             System.Web.HttpContext.Current.Session["permisos"] = 0;
             return View();
         }
 
-        /*public ActionResult CargarMenu()
-        {
-            Usuario usuario = Session["usuario"] as Usuario;
-            string menu = GenerateMenuSistemas(usuario.idUsuario);
-            Session["Menu"] = menu;
-            Session["User"] = usuario.nomUsuario;
-            return View("Menu");
-        }*/
-
         public ActionResult CerrarSesion()
         {
-            Usuario usuario = System.Web.HttpContext.Current.Session["usuario"] as Usuario;
+            //Usuario usuario = System.Web.HttpContext.Current.Session["usuario"] as Usuario;
             //string ru = Session["recordarUsuario"].ToString();
             return View("../Home/Index", usuario);
         }
 
         // Generación de menú de sistemas
-        public string GenerateMenuSistemas(string idUsuario)
+        public string GenerateMenuSistemas()
         {
             string menu = "";
             //menu += "<ul class='nav-sub'>";
             Conexion conexion = new Conexion();
-            DataRow[] sist = conexion.SelectDataTable("select ubd.Id_Usuario, bd.Id_Base_Datos, bd.str_Descripción_Base_Datos from tbl_M_Bases_Datos bd "
+            DataRow[] sistemas = conexion.SelectDataTable("select ubd.Id_Usuario, bd.Id_Base_Datos, bd.str_Descripción_Base_Datos from tbl_M_Bases_Datos bd "
                 + "inner join tbl_M_Usuarios_X_Base_Datos ubd on ubd.Id_Base_Datos = bd.Id_Base_Datos "
-                + "inner join tbl_M_Usuarios u on u.Id_Usuario = ubd.Id_Usuario", null).Select();
-            IEnumerable<DataRow> sistemas = sist.AsEnumerable().Where(x => x["Id_Usuario"].ToString() == idUsuario);
+                + "inner join tbl_M_Usuarios u on u.Id_Usuario = ubd.Id_Usuario where ubd.Id_Usuario = '" + usuario.idUsuario + "'", null).Select();
+            //IEnumerable<DataRow> sistemas = sist.AsEnumerable().Where(x => x["Id_Usuario"].ToString() == idUsuario);
             if (sistemas.Count() > 0)
             {
                 foreach (DataRow dr in sistemas)
@@ -58,14 +49,14 @@ namespace Prime_Web.Controllers
                     DataTable menus = conexion.SelectDataTable("SELECT u.Id_Usuario, ma.ID_Menu, ma.Descripcion, ma.Id_Papa, ma.Icono_Bootstrap, ma.Id_Base_Datos, ma.Url, ma.Tipo, ma.Id_Registro FROM   tbl_M_Bases_Datos bd "
                         +"INNER JOIN tbl_M_Menú_Aplicaciones ma ON bd.Id_Base_Datos = ma.Id_Base_Datos INNER JOIN tbl_M_Roles r ON bd.Id_Base_Datos = r.Id_Base_Datos "
                         +"INNER JOIN tbl_M_Roles_X_Autorizacion ra ON ma.ID_Menu = ra.Id_Menu AND r.Id_Rol = ra.ID_Rol INNER JOIN tbl_M_Usuarios_X_Base_Datos ubd ON bd.Id_Base_Datos = ubd.Id_Base_Datos "
-                        +"INNER JOIN tbl_M_Usuarios u ON ubd.Id_Usuario = u.Id_Usuario INNER JOIN tbl_M_Usuarios_X_Roles ur ON r.Id_Rol = ur.Id_Rol AND u.Id_Usuario = ur.Id_Usuario", null);
-                    IEnumerable<DataRow> rows = menus.AsEnumerable().Where(x => x["Id_Usuario"].ToString() == idUsuario && Int32.Parse(x["Id_Base_Datos"].ToString()) == MenuID && Int32.Parse(x["Id_Papa"].ToString()) == 0);
+                        +"INNER JOIN tbl_M_Usuarios u ON ubd.Id_Usuario = u.Id_Usuario INNER JOIN tbl_M_Usuarios_X_Roles ur ON r.Id_Rol = ur.Id_Rol AND u.Id_Usuario = ur.Id_Usuario where u.Id_Usuario = '" + usuario.idUsuario + "' AND ma.Id_Base_Datos = " + MenuID, null);
+                    IEnumerable<DataRow> rows = menus.AsEnumerable().Where(x => Int32.Parse(x["Id_Papa"].ToString()) == 0);
                     if (rows.Count() > 0)
                     {
                         //String submenu = "#submenu" + MenuID;
                         menu += "<li class='nav-dropdown'><a href='' id='sistema' title='" + MenuName + "'><i class='fa  fa-fw fa-moon-o'></i>" + MenuName+"</a>";
                         string subMenu = "";
-                        menu += GenerateMenuTotal(rows, subMenu, MenuID, menus, idUsuario);
+                        menu += GenerateMenuTotal(rows, subMenu, MenuID, menus);
                     }
                     /*else
                     {
@@ -79,7 +70,7 @@ namespace Prime_Web.Controllers
         }
 
         // Generación de menú de cada sistema
-        public string GenerateMenuTotal(IEnumerable<DataRow> rows, string menu, int IDbd, DataTable menus, string idUsuario)
+        public string GenerateMenuTotal(IEnumerable<DataRow> rows, string menu, int IDbd, DataTable menus)
         {
             menu += "<ul class='nav-sub'>";
             foreach (DataRow dr in rows)
@@ -107,13 +98,13 @@ namespace Prime_Web.Controllers
                     Url = "#";
                 }
                 //DataTable submenus = conexion.SelectDataTable("SELECT ID_Menu, Descripcion, Id_Papa, Icono_Bootstrap, Id_Base_Datos FROM tbl_M_Menú_Aplicaciones");
-                IEnumerable<DataRow> r = menus.AsEnumerable().Where(x => x["Id_Usuario"].ToString() == idUsuario && Int32.Parse(x["Id_Base_Datos"].ToString()) == IDbd && Int32.Parse(x["Id_Papa"].ToString()) == MenuID);
+                IEnumerable<DataRow> r = menus.AsEnumerable().Where(x => Int32.Parse(x["Id_Papa"].ToString()) == MenuID);
                 if (r.Count() > 0)
                 {
                     //string submenut = "0" + submenu;
                     menu += "<li class='nav-dropdown'><a href='' id='menu' title='" + MenuName + "'>" + MenuName + "</a>";
                     string subMenu = "";
-                    menu += GenerateMenuTotal(r, subMenu, IDbd, menus, idUsuario);
+                    menu += GenerateMenuTotal(r, subMenu, IDbd, menus);
                 }
                 else
                 {
@@ -129,7 +120,7 @@ namespace Prime_Web.Controllers
 
         // Generación de parametros para reportes
 
-        public string GenerateParameters(Usuario u, string idMenu, string idRegistro, List<Dimension>dim)
+        public string GenerateParameters(string idMenu, string idRegistro, List<Dimension>dim)
         {
             string parametros = "";
             Conexion conexion = new Conexion();
@@ -159,7 +150,7 @@ namespace Prime_Web.Controllers
 
                     if (!Query.Equals(""))
                     {
-                        Query = Query.Replace("_User_", u.idUsuario);
+                        Query = Query.Replace("_User_", usuario.idUsuario);
                         Query = Query.Replace("_Encuesta_", idRegistro);
                     }
 
@@ -182,12 +173,6 @@ namespace Prime_Web.Controllers
                         List<string> aux = new List<string>();
                         dim.Add(new Dimension { nombreDimension = Dimension, nombreControl = NombreCampo, valores = aux, tipoControl = "textarea" });
                     }
-                    //else if (TipoControl.Equals("datetime"))
-                    //{
-                    //    parametros += "<input type='text' value='' class='form-control' name='" + NombreCampo + "' id='fechahora'></div>";
-                    //    List<string> aux = new List<string>();
-                    //    dim.Add(new Dimension { nombreDimension = Dimension, nombreControl = NombreCampo, valores = aux, tipoControl = "datetime" });
-                    //}
                     else {
                         parametros += LoadParameters(tmp, TablaCarga, TipoControl, NombreCampo, Query, dim, Dimension);
                         parametros += "</div>";
@@ -314,17 +299,10 @@ namespace Prime_Web.Controllers
                         else
                         {
                             parametros += "<label><input type='radio' name='" + nombreCampo + "' value='" + id + "'> " + nombre + "</label><br/>";
-                            
-                            //List<string> aux = new List<string>();
-                            //aux.Add(id.ToString());
-                            //dim.Add(new Dimension { nombreTabla = tablaCarga, nombreControl = nombreCampo, nombrePK = nomPK, valores = aux, tipoControl = "radiobutton" });
                         }
-                        //parametros += "<input type='checkbox' id='" + id + "'  value='" + id + "'>" + nombre; 
-                        //dimensiones.Add(new Dimension { nombreTabla = tablaCarga, nombreColumna = nomPK, valorColumna = id.ToString(), tipoControl = tipoControl });
                     }
                     parametros += "</div>";
                 }
-                //parametros += "<div id='" + nombreCampo + "'><input type='checkbox' id=0  value='Todas' checked>Todas";
             }
             return parametros;
         }

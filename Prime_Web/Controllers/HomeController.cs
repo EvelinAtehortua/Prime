@@ -22,16 +22,11 @@ namespace Prime_Web.Controllers
         {
             Conexion conexion = new Conexion();
             DataRow[] rows = conexion.SelectDataTable("SELECT Id_Usuario, Nombre_Usuario, Clave_Usuario, str_Organización FROM tbl_M_Usuarios WHERE Id_Usuario = '" + u.idUsuario + "' AND Clave_Usuario = '" + u.clave + "'", null).Select();
-            //IEnumerable<DataRow> rows = usuario.AsEnumerable().Where(x => x["Id_Usuario"].ToString() == u.idUsuario && x["Clave_Usuario"].ToString() == u.clave);
             if (rows.Count() > 0)
             {
                 DataRow dr = rows[0];
-                //foreach (DataRow dr in rows)
-                //{
-                    u.nomUsuario = dr.Field<string>("Nombre_Usuario");
-                    u.nomOrganizacion = dr.Field<string>("str_Organización");
-                    //u.nitOrganizacion = dr.Field<string>("Nit_Organización");
-                //}
+                u.nomUsuario = dr.Field<string>("Nombre_Usuario");
+                u.nomOrganizacion = dr.Field<string>("str_Organización");
                 ViewBag.Error = null;
                 System.Web.HttpContext.Current.Session["usuario"] = u;
                 System.Web.HttpContext.Current.Session["recordarUsuario"] = 1;
