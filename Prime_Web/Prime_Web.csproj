@@ -266,6 +266,7 @@
     <Content Include="Views\Menu\Menu.cshtml" />
     <Content Include="Views\ReporteEncuesta\ReporteGeneral.cshtml" />
     <Content Include="Views\Master.cshtml" />
+    <Content Include="Views\Formulario\ViewFormulario.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -275,7 +276,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Formulario\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
