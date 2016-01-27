@@ -10,8 +10,8 @@ namespace Prime_Web.Controllers
 {
     public class MenuController : Controller
     {
-        List<string> dates = new List<string>();
-        List<string> selects = new List<string>();
+        List<int> dates = new List<int>();
+        List<int> selects = new List<int>();
         Usuario usuario = System.Web.HttpContext.Current.Session["usuario"] as Usuario;
         // GET: Menu
         public ActionResult Menu()
@@ -127,7 +127,7 @@ namespace Prime_Web.Controllers
             //string condicion = "";
             //Boolean b = false;
             conexion.obtenerDataSource(idMenu);
-            DataRow[] param = conexion.SelectDataTable("select Id_Menu, Dimension, Tabla_Carga, Tipo_Control, Nombre_Campo, Query_Dinamico from tbl_M_Parametros_Consulta_Tablero_Control where Id_Menu = " + idMenu, null).Select();
+            DataRow[] param = conexion.SelectDataTable("select Id_Parametro, Dimension, Tabla_Carga, Tipo_Control, Nombre_Campo, Query_Dinamico from tbl_M_Parametros_Consulta_Tablero_Control where Id_Menu = " + idMenu, null).Select();
             //IEnumerable<DataRow> row = param.AsEnumerable().Where(x => x["Id_Menu"].ToString() == idMenu);
 
             //parametros += "<li class='list-group-item'><div class='name'>Empresa</div><input type='checkbox' id='" + u.nitOrganizacion + "' name='cEmpresa' value='" + u.nitOrganizacion + "' checked> " + u.nomOrganizacion;
@@ -136,7 +136,7 @@ namespace Prime_Web.Controllers
             {
                 foreach (DataRow dr in param)
                 {
-                    //int MenuID = Int32.Parse(dr["Id_Menu"].ToString());
+                    int Id = Int32.Parse(dr["Id_Parametro"].ToString());
                     string Dimension = dr["Dimension"].ToString();
                     string NomMenu = Dimension.Replace(" ", "");
                     string TablaCarga = dr["Tabla_Carga"].ToString();
@@ -156,25 +156,25 @@ namespace Prime_Web.Controllers
 
                     if (TipoControl.Equals("textbox"))
                     {
-                        parametros += "<input type='text' name='" + NombreCampo + "' value=''></div>";
+                        parametros += "<input type='text' id='param"+Id+"' name='" + NombreCampo + "' value=''></div>";
                         List<string> aux = new List<string>();
-                        dim.Add(new Dimension { nombreDimension = Dimension, nombreControl = NombreCampo, valores = aux, tipoControl = "textbox"});
+                        dim.Add(new Dimension { nombreDimension = Dimension, idControl = Id, valores = aux, tipoControl = "textbox"});
                     }
                     else if (TipoControl.Equals("date"))
                     {
-                        parametros += "<input type='text' value='' class='form-control' id='" + NombreCampo + "' name='" + NombreCampo + "'></div>";
-                        dates.Add(NombreCampo);
+                        parametros += "<input type='text' value='' class='form-control' id='param" + Id + "' name='" + NombreCampo + "'></div>";
+                        dates.Add(Id);
                         List<string> aux = new List<string>();
-                        dim.Add(new Dimension { nombreDimension = Dimension, nombreControl = NombreCampo, valores = aux, tipoControl = "date" });
+                        dim.Add(new Dimension { nombreDimension = Dimension, idControl = Id, valores = aux, tipoControl = "date" });
                     }
                     else if (TipoControl.Equals("textarea"))
                     {
-                        parametros += "<textarea class='form-control' name='" + NombreCampo + "' rows='3'></textarea></div>";
+                        parametros += "<textarea class='form-control' id='param"+Id+"' name='" + NombreCampo + "' rows='3'></textarea></div>";
                         List<string> aux = new List<string>();
-                        dim.Add(new Dimension { nombreDimension = Dimension, nombreControl = NombreCampo, valores = aux, tipoControl = "textarea" });
+                        dim.Add(new Dimension { nombreDimension = Dimension, idControl = Id, valores = aux, tipoControl = "textarea" });
                     }
                     else {
-                        parametros += LoadParameters(tmp, TablaCarga, TipoControl, NombreCampo, Query, dim, Dimension);
+                        parametros += LoadParameters(tmp, TablaCarga, TipoControl, NombreCampo, Query, dim, Dimension, Id);
                         parametros += "</div>";
                     }
                     parametros += "</li>";
@@ -185,7 +185,7 @@ namespace Prime_Web.Controllers
             return parametros;
         }
 
-        public string LoadParameters(string parametros, string tablaCarga, string tipoControl, string nombreCampo, string Query, List<Dimension> dim, string dimension)
+        public string LoadParameters(string parametros, string tablaCarga, string tipoControl, string nombreCampo, string Query, List<Dimension> dim, string dimension, int idParam)
         {
             //string parametros = "";
             Conexion conexion = new Conexion();
@@ -211,10 +211,10 @@ namespace Prime_Web.Controllers
                 {
                     if (datos.Count() > 1)
                     {
-                        parametros += "<input type='checkbox' name='" + nombreCampo + "' value='0' checked> Todas<br>";
+                        parametros += "<input type='checkbox' class='param"+idParam+"' name='" + nombreCampo + "' value='0' checked> Todas<br>";
                         List<string> aux = new List<string>();
                         aux.Add("Todas");
-                        dim.Add(new Dimension { nombreDimension = dimension, nombreControl = nombreCampo, nombrePK = nomPK, valores = aux, tipoControl = "checkbox" });
+                        dim.Add(new Dimension { nombreDimension = dimension, idControl = idParam, nombrePK = nomPK, valores = aux, tipoControl = "checkbox" });
                     }
                     foreach (DataRow dr in datos)
                     {
@@ -223,14 +223,14 @@ namespace Prime_Web.Controllers
 
                         if (datos.Count() == 1)
                         {
-                            parametros += "<input type='checkbox' name='" + nombreCampo + "' value='" + id + "' checked> " + nombre + "<br>";
+                            parametros += "<input type='checkbox' class='param"+idParam+"' name='" + nombreCampo + "' value='" + id + "' checked> " + nombre + "<br>";
                             List<string> aux = new List<string>();
                             aux.Add(id.ToString());
-                            dim.Add(new Dimension { nombreDimension = dimension, nombreControl = nombreCampo, nombrePK = nomPK, valores = aux, tipoControl = "checkbox" });
+                            dim.Add(new Dimension { nombreDimension = dimension, idControl = idParam, nombrePK = nomPK, valores = aux, tipoControl = "checkbox" });
                         }
                         else
                         {
-                            parametros += "<input type='checkbox' name='" + nombreCampo + "' value='" + id + "'> " + nombre + "<br>";
+                            parametros += "<input type='checkbox' class='param"+idParam+"' name='" + nombreCampo + "' value='" + id + "'> " + nombre + "<br>";
                         }
                         //parametros += "<input type='checkbox' id='" + id + "'  value='" + id + "'>" + nombre;
                         //parametros += "<option value='" + id + "'>" + nombre + "</option>";
@@ -239,14 +239,14 @@ namespace Prime_Web.Controllers
                 }
                 else if (tipoControl.Contains("drop"))
                 {
-                    parametros += "<select name='" + nombreCampo + "' class='form-control' id='"+nombreCampo+"'>";
-                    selects.Add(nombreCampo);
+                    parametros += "<select name='" + nombreCampo + "' class='form-control' id='param"+idParam+"'>";
+                    selects.Add(idParam);
                     if (datos.Count() > 1)
                     {
                         parametros += "<option value='0' selected>Todas</option>";
                         List<string> aux = new List<string>();
                         aux.Add("Todas");
-                        dim.Add(new Dimension { nombreDimension = dimension, nombreControl = nombreCampo, nombrePK = nomPK, valores = aux, tipoControl = "select" });
+                        dim.Add(new Dimension { nombreDimension = dimension, idControl = idParam, nombrePK = nomPK, valores = aux, tipoControl = "select" });
                     }
                     foreach (DataRow dr in datos)
                     {
@@ -259,7 +259,7 @@ namespace Prime_Web.Controllers
                             parametros += "<option value='" + id + "' selected>" + nombre + "</option>";
                             List<string> aux = new List<string>();
                             aux.Add(id.ToString());
-                            dim.Add(new Dimension { nombreDimension = dimension, nombreControl = nombreCampo, nombrePK = nomPK, valores = aux, tipoControl = "select" });
+                            dim.Add(new Dimension { nombreDimension = dimension, idControl = idParam, nombrePK = nomPK, valores = aux, tipoControl = "select" });
                         }
                         else
                         {
@@ -276,10 +276,10 @@ namespace Prime_Web.Controllers
 
                     if (datos.Count() > 1)
                     {
-                        parametros += "<label><input type='radio' name='"+nombreCampo+"' value='0' checked> Todas</label><br/>";
+                        parametros += "<label><input type='radio' id='param"+idParam+"' name='"+nombreCampo+"' value='0' checked> Todas</label><br/>";
                         List<string> aux = new List<string>();
                         aux.Add("Todas");
-                        dim.Add(new Dimension { nombreDimension = dimension, nombreControl = nombreCampo, nombrePK = nomPK, valores = aux, tipoControl = "radiobutton" });
+                        dim.Add(new Dimension { nombreDimension = dimension, idControl = idParam, nombrePK = nomPK, valores = aux, tipoControl = "radiobutton" });
                     }
 
                     foreach (DataRow dr in datos)
@@ -291,14 +291,14 @@ namespace Prime_Web.Controllers
                         if (datos.Count() == 1)
                         {
                             //parametros += "<option value='" + id + "'selected>" + nombre + "</option>";
-                            parametros += "<label><input type='radio' name='" + nombreCampo + "' value='" + id + "' checked> "+nombre+"</label>";
+                            parametros += "<label><input type='radio' id='param"+idParam+"' name='" + nombreCampo + "' value='" + id + "' checked> "+nombre+"</label>";
                             List<string> aux = new List<string>();
                             aux.Add(id.ToString());
-                            dim.Add(new Dimension { nombreDimension = dimension, nombreControl = nombreCampo, nombrePK = nomPK, valores = aux, tipoControl = "radiobutton" });
+                            dim.Add(new Dimension { nombreDimension = dimension, idControl = idParam, nombrePK = nomPK, valores = aux, tipoControl = "radiobutton" });
                         }
                         else
                         {
-                            parametros += "<label><input type='radio' name='" + nombreCampo + "' value='" + id + "'> " + nombre + "</label><br/>";
+                            parametros += "<label><input type='radio' id='param"+idParam+"' name='" + nombreCampo + "' value='" + id + "'> " + nombre + "</label><br/>";
                         }
                     }
                     parametros += "</div>";

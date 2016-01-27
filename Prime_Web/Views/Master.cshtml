@@ -1,5 +1,4 @@
-﻿@{string rutaMenu = "";}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
@@ -160,129 +159,89 @@
         $(document).ready(function () {
 
             $('#cargar').click(function () {
-                alert("estoy submit")
                 var dimVal = [];
+                //var tiempo = [];
 
                 @foreach (var item in dim)
                 {
                     if(item.tipoControl.Equals("checkbox"))
                     {
-                        @: obtenerCheck('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
-                                        //@: alert(vc.join(", "));
+                        @: obtenerCheck('@item.idControl', '@item.nombreDimension', dimVal)
                     }
                     if (item.tipoControl.Equals("select"))
                     {
-                        @: obtenerSelect('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
-                                        //@: alert(vs.join(", "));
-                    }
+                        @: obtenerSelect('@item.idControl', '@item.nombreDimension', dimVal)
+                                    }
                     if (item.tipoControl.Equals("radiobutton"))
                     {
-                        @: obtenerRadio('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
-                                        //@: alert(vr.join(", "));
-                    }
+                        @: obtenerRadio('@item.idControl', '@item.nombreDimension', dimVal)
+                                    }
                     if (item.tipoControl.Equals("textarea"))
                     {
-                        @: obtenerTextarea('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
-                                        //@: alert(vta.join(", "));
-                    }
+                        @: obtenerTextarea('@item.idControl', '@item.nombreDimension', dimVal)
+                                    }
                     if(item.tipoControl.Equals("date") || item.tipoControl.Equals("text"))
                     {
-                        @: obtenerText('@Html.Raw(Json.Encode(item.nombreControl))', '@Html.Raw(Json.Encode(item.nombreDimension))')
-                                        //@: alert(vo.join(", "));
+                        @: obtenerText('@item.idControl', '@item.nombreDimension', dimVal)
                     }
                 }
+                //if (tiempo.length > 0) {
+                //    dimVal.push("Tiempo");
+                //    for (i = 0; i < tiempo.length; i++) {
+                //        dimVal.push(tiempo[i]);
+                //    }
+                //    dimVal.push("|");
+                //    tiempo = [];
+                //}
                 alert(dimVal.join(", "));
             });
 
-            //$('#fechahora').click(function (e) {
-            //$('#fechahora').datetimepicker({
-            //    format: 'mm-dd-yyyy'
-            //});
-            //});
-
-            function obtenerCheck(nombre, dimension) {
-                //alert(nombre)
-                //var valores = [];
-                //valores.push(dimension);
+            function obtenerCheck(id, dimension, dimVal) {
                 dimVal.push(dimension);
-                $.each($('input:checkbox[name=' + nombre + ']:checked'), function () {
-                    //alert($(this).val())
-                    //var valor = $(this).val();
-                    //alert(valor)
-                    //valores.push($(this).val());
+                $.each($('.param'+id+':checkbox:checked'), function () {
                     dimVal.push($(this).val());
                 });
-                //alert(valores.join(", "));
                 dimVal.push("|");
-                //return valores;
             }
 
-            function obtenerSelect(nombre, dimension) {
-                //alert(nombre)
-                //var valores = [];
-                //valores.push(dimension);
+            function obtenerSelect(id, dimension, dimVal) {
                 dimVal.push(dimension);
-                var valor = $('select[name=' + nombre + ']').val();
-                //valores.push(valor);
+                var valor = $('#param'+id+'').val();
                 dimVal.push(valor);
-                //alert(valor)
-                //alert(valores.join(", "));
                 dimVal.push("|");
-                //return valores;
             }
 
-            function obtenerRadio(nombre, dimension) {
-                //alert(nombre)
-                //var valores = [];
-                //valores.push(dimension);
+            function obtenerRadio(id, dimension, dimVal) {
                 dimVal.push(dimension);
-                var valor = $('input[type="radio"][name=' + nombre + ']:checked').val();
-                //valores.push(valor);
+                var valor = $('#param'+id+'').val();
                 dimVal.push(valor);
-                //alert(valor)
-                //alert(valores.join(", "));
                 dimVal.push("|");
-                //return valores;
             }
 
-            function obtenerTextarea(nombre, dimension) {
-                //alert(nombre)
-                //var valores = [];
-                //valores.push(dimension);
+            function obtenerTextarea(id, dimension, dimVal) {
                 dimVal.push(dimension)
-                var valor = $('textarea[name=' + nombre + ']').val();
+                var valor = $('#param'+id+'').val();
                 if (valor == "") {
-                    //valores.push(null);
                     dimVal.push("null");
                 } else {
-                    //valores.push(valor);
                     dimVal.push(valor);
                 }
-                //alert(valor)
-                //alert(valores.join(", "));
                 dimVal.push("|");
-                //return valores;
             }
 
-            function obtenerText(nombre, dimension) {
-                //alert(nombre)
-                //var valores = [];
-                //valores.push(dimension);
+            function obtenerText(id, dimension, dimVal) {
                 dimVal.push(dimension);
-                var valor = $('input:text[name=' + nombre + ']').val();
+                var valor = $('#param'+id+'').val();
                 if (valor == "") {
-                    //valores.push(null);
                     dimVal.push("null");
                 } else {
-                    //valores.push(valor);
                     dimVal.push(valor);
                 }
-                //alert(valor)
-                //alert(valores.join(", "));
                 dimVal.push("|");
-                //return valores;
             }
 
+
+            //Generador de gauges encuesta
             var cara1, cara2, cara3, cara4, cara5, cara6, cara7;
 
             window.onload = function () {
@@ -293,7 +252,6 @@
                     max: 100,
                     symbol: "%",
                     relativeGaugeSize: true,
-                    //label: $("#cara1").append('<div style="text-align:center"><img src="/Images/Iconos/1.dos_r7.png" /></div>')
                 });
 
                 var cara2 = new JustGage({
@@ -303,7 +261,6 @@
                     max: 100,
                     symbol: "%",
                     relativeGaugeSize: true,
-                    //label: $("#cara2").append('<div style="text-align:center"><img src="/Images/Iconos/2.tres_r7.png" /></div>')
                 });
 
                 var cara3 = new JustGage({
@@ -313,7 +270,6 @@
                     max: 100,
                     symbol: "%",
                     relativeGaugeSize: true,
-                    //label: $("#cara3").append('<div style="text-align:center"><img src="/Images/Iconos/3.cuatro_r7.png" /></div>')
                 });
 
                 var cara4 = new JustGage({
@@ -323,7 +279,6 @@
                     max: 100,
                     symbol: "%",
                     relativeGaugeSize: true,
-                    //label: $("#cara4").append('<div style="text-align:center"><img src="/Images/Iconos/4.cinco_r7.png" /></div>')
                 });
 
                 var cara5 = new JustGage({
@@ -333,7 +288,6 @@
                     max: 100,
                     symbol: "%",
                     relativeGaugeSize: true,
-                    //label: $("#cara5").append('<div style="text-align:center"><img src="/Images/Iconos/5.seis_r7.png" /></div>')
                 });
 
                 var cara6 = new JustGage({
@@ -343,7 +297,6 @@
                     max: 100,
                     symbol: "%",
                     relativeGaugeSize: true,
-                    //label: $("#cara6").append('<div style="text-align:center"><img src="/Images/Iconos/6.ocho_r7.png" /></div>')
                 });
 
                 var cara7 = new JustGage({
@@ -353,7 +306,6 @@
                     max: 100,
                     symbol: "%",
                     relativeGaugeSize: true,
-                    //label: $("#cara7").append('<div style="text-align:center"><img src="/Images/Iconos/7.diez_r7.png" /></div>')
                 });
 
                 setInterval(function () {
@@ -412,32 +364,31 @@
 
             @if (System.Web.HttpContext.Current.Session["paramDates"] != null)
             {
-                List<string> d = (List<string>)Session["paramDates"];
+                List<int> d = (List<int>)Session["paramDates"];
 
-                for (var index = 0; index < d.Count; index++)
+                for (int index = 0; index < d.Count; index++)
                 {
-                    @: cargarCalendario("@d[index]")
+                    @: cargarCalendario('@d[index]')
                 }
             }
             @if (System.Web.HttpContext.Current.Session["paramSelects"] != null)
             {
-                List<string> s = (List<string>)Session["paramSelects"];
+                List<int> s = (List<int>)Session["paramSelects"];
 
-                for (var index = 0; index < s.Count; index++)
-                {
-                    @: cargarCombo("@s[index]")
+                for (int index = 0; index < s.Count; index++)
+                { 
+                    @: cargarCombo('@s[index]')
                 }
             }
 
             function cargarCalendario(id) {
-                $('#' + id + '').datepicker({
+                $('#param' + id + '').datepicker({
                     format: 'mm-dd-yyyy'
                 });
             }
 
             function cargarCombo(id) {
-                /* dropdown and filter select */
-                $('#' + id + '').select2();
+                $('#param' + id + '').select2();
             }
         });
     </script>
