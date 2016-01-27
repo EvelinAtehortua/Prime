@@ -1,4 +1,101 @@
 ﻿@{
     Layout = "~/Views/Master.cshtml";
 }
-<h2>Menu</h2>
+@*<h2>Menu</h2>*@
+<section id="main-wrapper" class="theme-default">
+    <!-- Top Header -->
+    <header id="header">
+        <ul class="nav navbar-nav navbar-left">
+            <li class="toggle-navigation toggle-left">
+                <button class="sidebar-toggle" id="toggle-left">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </li>
+        </ul>
+        <div class="brand">
+            <img src="~/Images/LogoAlargadoTransparente.png" />
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown profile">
+                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="meta">
+                        <span class="avatar">
+                            <img src="~/Images/profile.png" class="img-circle" alt="">
+                        </span>
+                        <span class="text">@ViewBag.User</span>
+                        <span class="caret"></span>
+                    </span>
+                </a>
+                <ul class="dropdown-menu animated fadeInRight" role="menu">
+                    <li>
+                        <a href="../Menu/CerrarSesion">
+                            <span class="icon">
+                                <i class="fa fa-sign-out"></i>
+                            </span>Cerrar
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li></li>
+        </ul>
+    </header>
+    <aside class="sidebar sidebar-left">
+            <h5 class="sidebar-header">Favoritos</h5>
+            <ul class="nav nav-pills nav-stacked">
+                @*<li><a href="#" title="Favoritos"><i class='fa  fa-fw fa-star-o'></i>Favoritos</a>*@
+                @*@Html.Raw(ViewBag.Menu)*@
+                @*</li>*@
+            </ul>
+            <h5 class="sidebar-header">Menú</h5>
+            <ul class="nav nav-pills nav-stacked">
+                <li>
+                    <div id="content">
+                        @if (IsSectionDefined("divContent"))
+                        {
+                            @RenderSection("divContent", required: false)
+                        }
+                        else
+                        {
+                            <p>sknfsfnsdnsl</p>
+                        }
+                    </div>
+                </li>
+            </ul>
+    </aside>
+    <section class="main-content-wrapper">
+        @*<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="../Menu/Menu">Principal</a>
+                    </li>
+                </ul>
+            </div>*@
+        @if (!string.IsNullOrEmpty(ViewBag.Parametros))
+            {
+            <div id="config" class="config">
+                <h4>PARAMETROS<a href="javascript:void(0)" class="config-link closed"><i class="fa fa-indent"></i></a></h4>
+                <div class="config-swatch-wrap">
+                    <div class="row">
+                        <form id="formParam" action="../Reporte/cargar" method="POST">
+                            <ul class="list-group scrollable-menu">
+                                @Html.Raw(ViewBag.Parametros)
+                                <li class="list-group-item"><button type="button" class="btn btn-primary" id="cargar">Cargar</button></li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="main-content">
+            @RenderBody()
+        </div>
+    </section>
+    @*<div class="navbar navbar-default navbar-fixed-bottom">
+            <div style="text-align:center">
+                <footer>
+                    <img src="~/Images/LogoAlargadoTransparente.png" />
+                </footer>
+            </div>
+        </div>*@
+</section>
