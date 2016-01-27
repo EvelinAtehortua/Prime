@@ -125,7 +125,6 @@
     <Content Include="Content\styles-login.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\styles-reportes.css" />
     <Content Include="Content\sweetalert.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\LogoAlargadoTransparente.png" />
@@ -230,6 +229,7 @@
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\controles.js" />
+    <Content Include="scripts\graficos.js" />
     <Content Include="scripts\jquery-1.9.1.js" />
     <Content Include="scripts\jquery-1.9.1.min.js" />
     <Content Include="scripts\modernizr-2.8.3.js" />

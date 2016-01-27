@@ -20,19 +20,10 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2-bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
     <link href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/Content/styles-reportes.css" />
-    <script src="~/scripts/sweetalert.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="~/Styles/sweetalert.css"/>
-    <script src="~/scripts/justgage.js"></script>
-    <script src="~/scripts/raphael-2.1.4.min.js"></script>
-
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-     <script src="/bundles/ie?v=2XveJ5PauxD4hKrKMGJAy98WTe1yUixdEmsfBq9sjeQ1"></script>
-
-     <![endif]-->
-
+    @*<script src="~/scripts/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Styles/sweetalert.css"/>*@
+    @*<script src="~/scripts/justgage.js"></script>
+    <script src="~/scripts/raphael-2.1.4.min.js"></script>*@
 </head>
 <body>
     @{
@@ -145,17 +136,16 @@
         </div>
     </div>*@
     <script src="~/scripts/jquery-1.9.1.min.js"></script>
-    @*<script src="~/scripts/jquery-1.9.1.js"></script>*@
     <script src="~/scripts/bootstrap.min.js"></script>
     <script src="~/scripts/jquery.navgoco.min.js"></script>
     <script src="~/scripts/app.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.min.js"></script>
-    <script src="~/scripts/raphael-2.1.4.min.js"></script>
-    <script src="~/scripts/justgage.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    @*<script src="~/scripts/raphael-2.1.4.min.js"></script>
+    <script src="~/scripts/justgage.js"></script>*@
     <script src="~/scripts/controles.js"></script>
+    @*<script src="~/scripts/graficos.js"></script>*@
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -172,108 +162,31 @@
                     if (item.tipoControl.Equals("select"))
                     {
                         @: obtenerSelect('@item.idControl', '@item.nombreDimension', dimVal)
-                                    }
+                    }
                     if (item.tipoControl.Equals("radiobutton"))
                     {
                         @: obtenerRadio('@item.idControl', '@item.nombreDimension', dimVal)
-                                    }
+                    }
                     if (item.tipoControl.Equals("textarea"))
                     {
                         @: obtenerTextarea('@item.idControl', '@item.nombreDimension', dimVal)
-                                    }
+                    }
                     if(item.tipoControl.Equals("date") || item.tipoControl.Equals("text"))
                     {
                         @: obtenerText('@item.idControl', '@item.nombreDimension', dimVal)
                     }
                 }
-                //if (tiempo.length > 0) {
-                //    dimVal.push("Tiempo");
-                //    for (i = 0; i < tiempo.length; i++) {
-                //        dimVal.push(tiempo[i]);
-                //    }
-                //    dimVal.push("|");
-                //    tiempo = [];
-                //}
-                alert(dimVal.join(", "));
+                //alert(dimVal.join(", "));
+                $.ajax({
+                    url: '/ReporteEncuesta/CargarValores',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ parametros: dimVal }),
+                    success: function (result) {
+
+                    }
+                });
             });
-
-            //Generador de gauges encuesta
-            var cara1, cara2, cara3, cara4, cara5, cara6, cara7;
-
-            window.onload = function () {
-                var cara1 = new JustGage({
-                    id: "cara1",
-                    value: getRandomInt(0, 100),
-                    min: 0,
-                    max: 100,
-                    symbol: "%",
-                    relativeGaugeSize: true,
-                });
-
-                var cara2 = new JustGage({
-                    id: "cara2",
-                    value: getRandomInt(0, 100),
-                    min: 0,
-                    max: 100,
-                    symbol: "%",
-                    relativeGaugeSize: true,
-                });
-
-                var cara3 = new JustGage({
-                    id: "cara3",
-                    value: getRandomInt(0, 100),
-                    min: 0,
-                    max: 100,
-                    symbol: "%",
-                    relativeGaugeSize: true,
-                });
-
-                var cara4 = new JustGage({
-                    id: "cara4",
-                    value: getRandomInt(0, 100),
-                    min: 0,
-                    max: 100,
-                    symbol: "%",
-                    relativeGaugeSize: true,
-                });
-
-                var cara5 = new JustGage({
-                    id: "cara5",
-                    value: getRandomInt(0, 100),
-                    min: 0,
-                    max: 100,
-                    symbol: "%",
-                    relativeGaugeSize: true,
-                });
-
-                var cara6 = new JustGage({
-                    id: "cara6",
-                    value: getRandomInt(0, 100),
-                    min: 0,
-                    max: 100,
-                    symbol: "%",
-                    relativeGaugeSize: true,
-                });
-
-                var cara7 = new JustGage({
-                    id: "cara7",
-                    value: getRandomInt(0, 100),
-                    min: 0,
-                    max: 100,
-                    symbol: "%",
-                    relativeGaugeSize: true,
-                });
-
-                setInterval(function () {
-                    cara1.refresh(getRandomInt(50, 100));
-                    cara2.refresh(getRandomInt(50, 100));
-                    cara3.refresh(getRandomInt(50, 100));
-                    cara4.refresh(getRandomInt(50, 100));
-                    cara5.refresh(getRandomInt(50, 100));
-                    cara6.refresh(getRandomInt(50, 100));
-                    cara7.refresh(getRandomInt(50, 100));
-                }, 2500);
-            };
 
             @if (System.Web.HttpContext.Current.Session["paramDates"] != null)
             {
@@ -281,7 +194,7 @@
 
                 for (int index = 0; index < d.Count; index++)
                 {
-                    @: cargarCalendario('@d[index]')
+                    @: cargarCalendario('@d[index]');
                 }
             }
             @if (System.Web.HttpContext.Current.Session["paramSelects"] != null)
@@ -290,7 +203,7 @@
 
                 for (int index = 0; index < s.Count; index++)
                 { 
-                    @: cargarCombo('@s[index]')
+                    @: cargarCombo('@s[index]');
                 }
             }
         });

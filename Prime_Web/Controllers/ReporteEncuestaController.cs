@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services;
 
 namespace Prime_Web.Controllers
 {
@@ -58,6 +59,34 @@ namespace Prime_Web.Controllers
             catch (Exception e){}
             //System.Web.HttpContext.Current.Session["rango"] = r;
             System.Web.HttpContext.Current.Session["permisos"] = aux;
+        }
+
+        [WebMethod]
+        public void CargarValores(string [] parametros)
+        {
+            string tmp = "";
+            for (int i = 0; i < parametros.Length; i++)
+            {
+                if (!parametros[i].Equals("|"))
+                {
+                    tmp += parametros[i];
+                }
+                else
+                {
+                    tmp += "|";
+                }
+            }
+            string [] valores = tmp.Split('|');
+            //string datasource = System.Web.HttpContext.Current.Session["dataSource"].ToString();
+            //SqlConnection conn = new SqlConnection(datasource);
+            //SqlCommand cmd = new SqlCommand();
+            //Object returnValue;
+            //cmd.CommandText = "SP_Encuesta";
+            //cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.Connection = conn;
+            //conn.Open();
+            //returnValue = cmd.ExecuteScalar();
+            //conn.Close();
         }
     }
 }

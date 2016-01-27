@@ -1,5 +1,8 @@
 ﻿@{
     Layout = "~/Views/Master.cshtml";
+    <script src="~/scripts/raphael-2.1.4.min.js"></script>
+    <script src="~/scripts/justgage.js"></script>
+    <script src="~/scripts/graficos.js"></script>
 }
 @*<h2>Reporte General</h2>*@
 @*@section content{*@
@@ -13,16 +16,18 @@
         <div class="row">
 
             @for (int i = 0; i < permisos.Length; i++)
-        {
-            int div = 96 / permisos.Length;
-            string cara = "cara" + permisos[i];
-            string imagen = "/Images/Iconos/" + permisos[i] + ".png";
+            {
+                int div = 96 / permisos.Length;
+                string cara = "cara" + permisos[i];
+                string imagen = "/Images/Iconos/" + permisos[i] + ".png";
                 <div class="col-md-3 col-sm-4 col-xs-6" style="width:@div%;">
                     <div id="@cara" style="height:154.517px; margin-top: -60px; "></div>
-                    @*<div id="cara1" style="margin-top: -40px;"></div>*@
                     <div style="text-align:center"><img src="@imagen" /></div>
                 </div>
             }
         </div>
     </div>
+    <script type="text/javascript">
+        cargarGauges();
+    </script>
 @*}*@
