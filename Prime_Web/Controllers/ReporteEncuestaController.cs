@@ -25,7 +25,7 @@ namespace Prime_Web.Controllers
             ValidateRangoRespuestas(idRegistro);
             ViewBag.Advertencia = null;
             System.Web.HttpContext.Current.Session["dimensiones"] = dim;
-            return View("ReporteGeneral");
+            return View();
         }
 
         [HttpGet]
@@ -36,7 +36,7 @@ namespace Prime_Web.Controllers
             string parametros = reporte.GenerateParameters(idMenu, idRegistro, dim);
             ViewBag.Parametros = parametros;
             /*Session["dimensiones"] = dimensiones;*/
-            return View("ReporteDetalle");
+            return View();
         }
 
         public void ValidateRangoRespuestas(string idRegistro)

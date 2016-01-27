@@ -17,16 +17,14 @@ namespace Prime_Web.Controllers
         public ActionResult Menu()
         {
             string menu = GenerateMenuSistemas();
-            System.Web.HttpContext.Current.Session["Menu"] = menu;
-            System.Web.HttpContext.Current.Session["User"] = usuario.nomUsuario;
+            ViewBag.Menu = menu;
+            ViewBag.User = usuario.nomUsuario;
             System.Web.HttpContext.Current.Session["permisos"] = 0;
             return View();
         }
 
         public ActionResult CerrarSesion()
         {
-            //Usuario usuario = System.Web.HttpContext.Current.Session["usuario"] as Usuario;
-            //string ru = Session["recordarUsuario"].ToString();
             return View("../Home/Index", usuario);
         }
 
@@ -128,9 +126,6 @@ namespace Prime_Web.Controllers
             //Boolean b = false;
             conexion.obtenerDataSource(idMenu);
             DataRow[] param = conexion.SelectDataTable("select Id_Parametro, Dimension, Tabla_Carga, Tipo_Control, Nombre_Campo, Query_Dinamico from tbl_M_Parametros_Consulta_Tablero_Control where Id_Menu = " + idMenu, null).Select();
-            //IEnumerable<DataRow> row = param.AsEnumerable().Where(x => x["Id_Menu"].ToString() == idMenu);
-
-            //parametros += "<li class='list-group-item'><div class='name'>Empresa</div><input type='checkbox' id='" + u.nitOrganizacion + "' name='cEmpresa' value='" + u.nitOrganizacion + "' checked> " + u.nomOrganizacion;
 
             if (param.Count() > 0)
             {
