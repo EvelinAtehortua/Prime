@@ -65,15 +65,17 @@ namespace Prime_Web.Controllers
         public void CargarValores(string [] parametros)
         {
             string tmp = "";
-            for (int i = 0; i < parametros.Length; i++)
+            string prueba = "";
+            for (int i = 0; i < parametros.Length-1; i++)
             {
-                if (!parametros[i].Equals("|"))
+                prueba = parametros[i];
+                if (parametros[i].Equals("|") || parametros[i + 1].Equals("|"))
                 {
                     tmp += parametros[i];
                 }
                 else
                 {
-                    tmp += "|";
+                    tmp += parametros[i]+",";
                 }
             }
             string [] valores = tmp.Split('|');
